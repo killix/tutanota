@@ -1104,6 +1104,9 @@ module.exports = {
 		"yes_label": "Yes",
 		"yourCalendars_label": "Your calendars",
 		"yourFolders_action": "YOUR FOLDERS",
-		"yourMessage_label": "Your message"
+		"yourMessage_label": "Your message",
+		"overrideFont_label": "Override Default Font",
+		"requiresNewWindow_msg": "Requires the Window to be reopened to take effect",
+		"dontOverride_action": "Don't override"
 	}
 }

@@ -25,6 +25,14 @@ const DownloadLocationStrategy = Object.freeze({
 	CHOOSE_DIRECTORY: 1
 })
 
+const overrideFonts = [{name: lang.get("dontOverride_action"), value: null}]
+if (env.platformId === 'win32') {
+	overrideFonts.push(
+		{name: "SimHei", value: "SimHei"},
+		{name: "黑体", value: "黑体"}
+	)
+}
+
 export class DesktopSettingsViewer implements UpdatableSettingsViewer {
 	_isDefaultMailtoHandler: Stream<?boolean>;
 	_defaultDownloadPath: Stream<string>;
@@ -32,6 +40,7 @@ export class DesktopSettingsViewer implements UpdatableSettingsViewer {
 	_runOnStartup: Stream<?boolean>;
 	_isIntegrated: Stream<?boolean>;
 	_isAutoUpdateEnabled: Stream<?boolean>;
+	_overrideFont: Stream<?string>;
 	_showAutoUpdateOption: Stream<?boolean>;
 	_isPathDialogOpen: boolean;
 
@@ -41,6 +50,7 @@ export class DesktopSettingsViewer implements UpdatableSettingsViewer {
 		this._runOnStartup = stream(false)
 		this._isIntegrated = stream(false)
 		this._isAutoUpdateEnabled = stream(false)
+		this._overrideFont = stream(null)
 		this._showAutoUpdateOption = stream(true)
 		this._requestDesktopConfig()
 	}
@@ -73,7 +83,7 @@ export class DesktopSettingsViewer implements UpdatableSettingsViewer {
 			selectedValue: this._runAsTrayApp,
 			selectionChangedHandler: v => {
 				this._runAsTrayApp(v)
-				this.setBooleanSetting('runAsTrayApp', v)
+				this.updateSetting('runAsTrayApp', v)
 			}
 		}
 
@@ -122,7 +132,7 @@ export class DesktopSettingsViewer implements UpdatableSettingsViewer {
 			selectedValue: this._isAutoUpdateEnabled,
 			selectionChangedHandler: v => {
 				this._isAutoUpdateEnabled(v)
-				this.setBooleanSetting('enableAutoUpdate', v)
+				this.updateSetting('enableAutoUpdate', v)
 			}
 		}
 
@@ -151,6 +161,17 @@ export class DesktopSettingsViewer implements UpdatableSettingsViewer {
 			disabled: true
 		}
 
+		const setOverrideFontAttrs: DropDownSelectorAttrs<?string> = {
+			label: "overrideFont_label",
+			helpLabel: () => lang.get("requiresNewWindow_msg"),
+			items: overrideFonts,
+			selectedValue: this._overrideFont,
+			selectionChangedHandler: v => {
+				this._overrideFont(v)
+				this.updateSetting('overrideFont', v)
+			}
+		}
+
 		return [
 			m("#user-settings.fill-absolute.scroll.plr-l.pb-xl", [
 				m(".h4.mt-l", lang.get('desktopSettings_label')),
@@ -159,6 +180,8 @@ export class DesktopSettingsViewer implements UpdatableSettingsViewer {
 				m(DropDownSelectorN, setRunOnStartupAttrs),
 				m(TextFieldN, defaultDownloadPathAttrs),
 				env.platformId === 'linux' ? m(DropDownSelectorN, setDesktopIntegrationAttrs) : null,
+				m(DropDownSelectorN, setAutoUpdateAttrs),
+				overrideFonts.length > 1 ? m(DropDownSelectorN, setOverrideFontAttrs) : null,
 				this._showAutoUpdateOption() ? m(DropDownSelectorN, setAutoUpdateAttrs) : null,
 			])
 		]
@@ -194,11 +217,12 @@ export class DesktopSettingsViewer implements UpdatableSettingsViewer {
 			         this._isIntegrated(desktopConfig.isIntegrated)
 			         this._showAutoUpdateOption(desktopConfig.showAutoUpdateOption)
 			         this._isAutoUpdateEnabled(desktopConfig.enableAutoUpdate)
+			         this._overrideFont(desktopConfig.overrideFont)
 			         m.redraw()
 		         })
 	}
 
-	setBooleanSetting(setting: string, value: boolean): void {
+	updateSetting(setting: string, value: boolean): void {
 		nativeApp.invokeNative(new Request('sendDesktopConfig', []))
 		         .then(config => {
 			         config[setting] = value

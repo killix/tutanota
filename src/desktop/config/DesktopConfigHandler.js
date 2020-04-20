@@ -19,7 +19,8 @@ export const DesktopConfigKey = {
 	scheduledAlarms: 'scheduledAlarms',
 	lastProcessedNotificationId: 'lastProcessedNotificationId',
 	lastMissedNotificationCheckTime: 'lastMissedNotificationCheckTime',
-	desktopConfigVersion: "desktopConfigVersion"
+	desktopConfigVersion: "desktopConfigVersion",
+	overrideFont: "overrideFont"
 }
 export type DesktopConfigKeyEnum = $Values<typeof DesktopConfigKey>
 
