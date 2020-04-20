@@ -230,12 +230,12 @@ export class Dropdown {
 				&& matchingButton
 				&& matchingButton.clickHandler
 			) {
-				matchingButton.clickHandler(clickEvent, matchingButton._domButton)
+				matchingButton.clickHandler(clickEvent, this._domInput)
 				this.close()
 			} else {
 				let selected = visibleElements.find(b => document.activeElement === b._domButton)
 				if (selected && selected.clickHandler) {
-					selected.clickHandler(clickEvent, selected._domButton)
+					selected.clickHandler(clickEvent, this._domInput)
 					this.close()
 				}
 			}

@@ -108,7 +108,7 @@ export class CalendarAgendaView implements MComponent<Attrs> {
 										secondLineText: ev.location,
 										color: getEventColor(ev, attrs.groupColors),
 										hasAlarm: !startsBefore && hasAlarmsForTheUser(ev),
-										onEventClicked: () => attrs.onEventClicked(ev),
+										click: () => attrs.onEventClicked(ev),
 										height: 38,
 										verticalPadding: 2
 									}))

@@ -37,7 +37,7 @@ class HtmlSanitizer {
 				if (currentNode.classList) {
 					let cl = currentNode.classList;
 					for (let i = cl.length - 1; i >= 0; i--) {
-						const item = cl.item(i)
+						const item = cl.item(0)
 						if (allowedClasses.indexOf(item) === -1) {
 							cl.remove(item);
 						}

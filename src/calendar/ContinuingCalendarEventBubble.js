@@ -31,7 +31,7 @@ export class ContinuingCalendarEventBubble implements MComponent<ContinuingCalen
 				m(CalendarEventBubble, {
 					text: getEventText(attrs.event, attrs.showTime),
 					color: attrs.color,
-					onEventClicked: () => attrs.onEventClicked(attrs.event),
+					click: () => attrs.onEventClicked(attrs.event),
 					noBorderLeft: attrs.startsBefore,
 					noBorderRight: attrs.endsAfter,
 					hasAlarm: hasAlarmsForTheUser(attrs.event)

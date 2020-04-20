@@ -16,6 +16,7 @@ import stream from "mithril/stream/stream.js"
 import {asyncImport} from "../../api/common/utils/Utils"
 import type {PosRect} from "./Dropdown"
 import {Keys} from "../../api/common/TutanotaConstants"
+import {newMouseEvent} from "../HtmlUtils"
 
 assertMainOrNodeBoot()
 
@@ -230,7 +231,8 @@ export class DropdownN {
 		if (document.activeElement === this._domInput
 			&& matchingButton
 			&& matchingButton.click) {
-			matchingButton.click(new MouseEvent("click"), this._domInput)
+			const click = matchingButton.click
+			click(newMouseEvent(), this._domInput)
 			return false
 		}
 		return true

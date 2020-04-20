@@ -242,7 +242,7 @@ export class CalendarMonthView implements MComponent<CalendarMonthAttrs>, Lifecy
 					}, m(CalendarEventBubble, {
 						text: "+" + moreEventsCount,
 						color: isPadding ? theme.list_bg.substring(1) : theme.content_bg.substring(1),
-						onEventClicked: () => {
+						click: () => {
 							attrs.onDateSelected(day.date)
 						},
 						hasAlarm: false,
