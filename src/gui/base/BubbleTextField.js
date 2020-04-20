@@ -106,7 +106,20 @@ export class BubbleTextField<T> {
 
 		this.view = () => {
 			return m('.bubble-text-field', [
-				m(this.textField),
+				m(this.textField, {
+					oncreate: () => {
+						// If the field is initialized with bubbles but the user did not edit it yet then field will not have correct size
+						// and last bubble will not be on the same line with right injections (like "show" button). It is fixed after user
+						// edits the field and autocompletion changes the field but before that it's broken. To avoid it we set the size
+						// manually.
+						//
+						// This oncreate is run before the dom input's oncreate is run and sets the field so we have to access input on the
+						// next frame. There's no other callback to use without requesting redraw.
+						requestAnimationFrame(() => {
+							if (this.textField._domInput) this.textField._domInput.size = 1
+						})
+					}
+				}),
 				m(".suggestions.text-ellipsis.ml-negative-l", {
 					oncreate: vnode => this._domSuggestions = vnode.dom,
 					onmousedown: e => this.textField.skipNextBlur = true,
